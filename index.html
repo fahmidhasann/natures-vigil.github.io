@@ -249,13 +249,28 @@
         }
         
         .member-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
+            width: 200px;
+            height: 250px;
+            border-radius: 15px;
             object-fit: cover;
             margin: 0 auto 20px;
             border: 5px solid var(--light-gray);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        
+        .member-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .member-info {
+            margin-top: 10px;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
         }
         
         .member-info h3 {
