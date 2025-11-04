@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature's Vigil - Real-time AI-powered littering detection</title>
+    <meta name="description" content="Computer vision system for detecting littering behavior in real-time to support Bangladesh's cleantech goals">
+    <style>
+        /* Modern, minimalistic design */
+        :root {
+            --primary: #2e7d32;
+            --primary-light: #60ad5e;
+            --primary-dark: #1b5e20;
+            --secondary: #1976d2;
+            --light: #f5f5f5;
+            --dark: #333;
+            --gray: #757575;
+            --light-gray: #e0e0e0;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --max-width: 1200px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--dark);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        section {
+            padding: 100px 0;
+        }
+        
+        section:nth-child(even) {
+            background-color: var(--white);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            position: relative;
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 50px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .stat-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .content-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 50px;
+            margin: 40px 0;
+        }
+        
+        .text-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .text-content h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .text-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .image-content {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .tech-item {
+            background-color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            border: 1px solid var(--light-gray);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .tech-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+            background-color: var(--light);
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-member {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            padding: 30px 20px;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .member-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid var(--light-gray);
+            box-shadow: var(--shadow);
+        }
+        
+        .member-info h3 {
+            font-size: 1.5rem;
+            margin: 10px 0 10px;
+            color: var(--primary);
+        }
+        
+        .member-role {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.1rem;
+        }
+        
+        .business-models {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .model-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-top: 4px solid var(--primary);
+        }
+        
+        .model-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .model-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .model-title {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .model-card p {
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+        
+        .cta-container {
+            text-align: center;
+            background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);
+            padding: 100px 20px;
+            border-radius: var(--border-radius);
+            margin: 40px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .cta-container h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .cta-container p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn.cta-btn {
+            background-color: var(--white);
+            color: var(--primary);
+        }
+        
+        .btn.cta-btn:hover {
+            background-color: #f0f0f0;
+            color: var(--primary-dark);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .hero {
+                padding: 80px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .content-container {
+                flex-direction: column;
+            }
+            
+            section {
+                padding: 70px 0;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .cta-container {
+                padding: 60px 20px;
+            }
+            
+            .cta-container h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.7rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <h2>Nature's Vigil</h2>
+                <a href="#solution" class="btn">Learn More</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <img src="Logo.png" alt="Nature's Vigil Logo" class="logo">
+            <h1>Nature's Vigil</h1>
+            <p>Real-time AI-powered behavior detection for littering prevention</p>
+            <a href="#solution" class="btn">Learn How It Works</a>
+        </div>
+    </section>
+    
+    <main>
+        <section id="problem">
+            <div class="container">
+                <h2 class="section-title">The Problem</h2>
+                <div class="content-container">
+                    <div class="text-content">
+                        <p>Bangladesh generates 25,000-30,000 tonnes of solid waste daily. Only 31% of plastic waste is recycled, and littering remains largely unmonitored due to insufficient enforcement resources.</p>
+                        <p>The National Action Plan targets a 30% reduction in plastic waste generation by 2030, a 50% reduction in virgin plastic use by 2030, and 50% plastic recycling by 2025—a target impossible without behavioral change.</p>
+                        <p>People living in cities have problems with dirty water and health risks. The waste management sector doesn't have enough resources to monitor incidents. Environmental agencies have a hard time because they don't have enough staff. Poor communities suffer the most from pollution.</p>
+                    </div>
+                    <div class="image-content">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-value">31%</div>
+                                <div class="stat-label">Plastic Waste Recycled</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">50%</div>
+                                <div class="stat-label">Target Reduction by 2030</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">25,000+</div>
+                                <div class="stat-label">Tonnes Daily Waste</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="solution">
+            <div class="container">
+                <h2 class="section-title">Our Solution</h2>
+                <div class="content-container">
+                    <div class="text-content">
+                        <p>Nature's Vigil is an edge-based computer vision system that detects littering behaviors in real-time CCTV footage and triggers automated enforcement alerts (audio warnings, visual overlays, incident logging, and municipal notification).</p>
+                        <p>Our system works through a six-step process that ensures accurate detection and immediate response:</p>
+                        <ol style="margin-left: 20px; margin-top: 15px;">
+                            <li><strong>Data Ingestion:</strong> Standard IP cameras capture continuous video streams</li>
+                            <li><strong>Real-time Processing:</strong> YOLO v8 detects humans and waste objects with 30-60 FPS performance</li>
+                            <li><strong>Behavior Recognition:</strong> MediaPipe extracts 33 body landmarks per frame, analyzing arm trajectory and temporal patterns</li>
+                            <li><strong>Action Classification:</strong> Temporal CNN classifies sequences as littering vs. normal activity with 150ms latency</li>
+                            <li><strong>Alert Trigger:</strong> Upon detection (90% confidence), system activates audio alarm, visual overlay, SMS/app notification to enforcement officers</li>
+                            <li><strong>Evidence Preservation:</strong> 24/7 encrypted logging enables accountability and supports enforcement proceedings</li>
+                        </ol>
+                    </div>
+                    <div class="image-content">
+                        <div style="background-color: var(--light); padding: 20px; border-radius: var(--border-radius); text-align: left;">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Key Features</h3>
+                            <ul style="margin-left: 20px;">
+                                <li>Real-time detection</li>
+                                <li>Automated alerts</li>
+                                <li>90%+ precision</li>
+                                <li>Edge processing</li>
+                                <li>24/7 monitoring</li>
+                                <li>Evidence logging</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="technology">
+            <div class="container">
+                <h2 class="section-title">Technology Stack</h2>
+                <div class="content-container">
+                    <div class="text-content">
+                        <p>Our system leverages cutting-edge computer vision and AI technologies to detect littering behavior in real-time:</p>
+                        <h3 style="margin: 20px 0 15px; color: var(--primary);">Architecture: Two-Stage Approach</h3>
+                        <p><strong>Stage 1: Object Detection (YOLO v8)</strong><br>
+                        Detects humans and waste objects in real-time with 30-60 FPS performance. Multiple model variants (nano to extra) provide speed/accuracy tradeoff for different deployment scenarios.</p>
+                        <p><strong>Stage 2: Action Recognition</strong><br>
+                        Uses MediaPipe for pose estimation (33 body landmarks per frame), analyzing arm trajectory and angle changes to identify throwing actions. Temporal CNN captures sequential movement patterns for accurate behavior classification.</p>
+                        
+                        <h3 style="margin: 20px 0 15px; color: var(--primary);">Recommended Tech Stack</h3>
+                        <ul style="margin-left: 20px;">
+                            <li>Language: Python 3.9+</li>
+                            <li>Deep Learning: PyTorch (over TensorFlow for beginners)</li>
+                            <li>Models: YOLOv8, MediaPipe Pose, Custom Temporal CNN</li>
+                            <li>Deployment: NVIDIA Jetson Xavier NX for edge processing</li>
+                            <li>Tools: OpenCV, Label Studio/Roboflow for annotation</li>
+                        </ul>
+                    </div>
+                    <div class="image-content">
+                        <div style="background-color: var(--white); padding: 20px; border-radius: var(--border-radius); box-shadow: var(--shadow);">
+                            <h3 style="color: var(--primary); text-align: center; margin-bottom: 20px;">System Architecture</h3>
+                            <div style="text-align: left;">
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">1</div>
+                                    <div>[IP Camera] → Video Stream</div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">2</div>
+                                    <div>[NVIDIA Jetson Xavier NX] → Real-time Processing</div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">3</div>
+                                    <div>[YOLO v8] → Object Detection</div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">4</div>
+                                    <div>[MediaPipe] → Pose Estimation</div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">5</div>
+                                    <div>[Temporal CNN] → Action Recognition</div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin: 15px 0; padding: 10px; background: var(--light); border-radius: var(--border-radius);">
+                                    <div style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">6</div>
+                                    <div>[Alert System] → Audio/Visual Alerts</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 40px;">
+                    <h3 style="text-align: center; margin-bottom: 20px; color: var(--primary);">Key Technologies</h3>
+                    <div class="tech-stack">
+                        <div class="tech-item">YOLO v8</div>
+                        <div class="tech-item">MediaPipe</div>
+                        <div class="tech-item">PyTorch</div>
+                        <div class="tech-item">OpenCV</div>
+                        <div class="tech-item">Temporal CNN</div>
+                        <div class="tech-item">NVIDIA Jetson</div>
+                        <div class="tech-item">Python</div>
+                        <div class="tech-item">Computer Vision</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="impact">
+            <div class="container">
+                <h2 class="section-title">Impact & Vision</h2>
+                <div class="content-container">
+                    <div class="text-content">
+                        <h3 style="color: var(--primary); margin-bottom: 15px;">Our Vision</h3>
+                        <p>Transform littering from a behavioral crisis into a solved environmental problem through intelligent surveillance.</p>
+                        <p>Vision: Deploying AI-powered computer vision across Bangladesh's urban centers to detect, alert, and prevent littering in real-time, directly supporting the National Action Plan targets of reducing plastic waste generation by 30% and virgin plastic use by 50% by 2030.</p>
+                        
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Environmental Impact</h3>
+                        <p>Our system directly addresses a critical need: Bangladesh currently recycles only 31% of its plastic waste, and the National Action Plan targets 50% reduction by 2030.</p>
+                        
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Market Opportunity</h3>
+                        <p>Bangladesh's waste management market: USD 3.7 billion by 2026 (8.3% CAGR). Our immediate addressable market: 50 cities × 5-10 cameras = USD 3.75-15 million (Year 1-2).</p>
+                        
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Strategic Alignment</h3>
+                        <p>Aligned with National Goals: Direct support for Bangladesh National Action Plan. Environmental Urgency: Addresses plastic crisis in high-need region. Technical Feasibility: Well-established computer vision techniques. Clear Business Model: Proven revenue streams and target customers.</p>
+                    </div>
+                    <div class="image-content">
+                        <div class="stats-container">
+                            <div class="stat-card">
+                                <div class="stat-value">30%</div>
+                                <div class="stat-label">Reduction Target by 2030</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">50%</div>
+                                <div class="stat-label">Plastic Waste Target</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">50</div>
+                                <div class="stat-label">Bangladesh Cities</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">$3.7B</div>
+                                <div class="stat-label">Market Size by 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="team">
+            <div class="container">
+                <h2 class="section-title">Our Team</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 40px; color: var(--gray);">Team from Bangladesh Agricultural University, Mymensingh</p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="Team Member/Swikrity Barman (CEO).jpg" alt="Swikrity Barman, CEO" class="member-img">
+                        <div class="member-info">
+                            <h3>Swikrity Barman</h3>
+                            <span class="member-role">CEO</span>
+                            <p>Leading the business strategy and market development for Nature's Vigil.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="Team Member/Fahmid Hasan (CTO).jpg" alt="Fahmid Hasan, CTO" class="member-img">
+                        <div class="member-info">
+                            <h3>Fahmid Hasan</h3>
+                            <span class="member-role">CTO</span>
+                            <p>Overseeing the technical development and implementation of our computer vision system.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="business">
+            <div class="container">
+                <h2 class="section-title">Business Model</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 40px; color: var(--gray);">Multiple revenue streams to ensure sustainable growth and market penetration</p>
+                
+                <div class="business-models">
+                    <div class="model-card">
+                        <div class="model-icon">🏛️</div>
+                        <h3 class="model-title">System Licensing</h3>
+                        <p>One-time fees for city-wide deployment of the Nature's Vigil system. USD 15,000-50,000 per city depending on deployment scale (5-20 cameras), system complexity, and training requirements.</p>
+                        <div style="margin-top: 15px; font-weight: bold; color: var(--primary);">Projected 25 city contracts in Year 1</div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-icon">📊</div>
+                        <h3 class="model-title">SaaS Monitoring</h3>
+                        <p>Recurring monthly service for 24/7 professional monitoring, alert management, and incident response. USD 500-2,000/month per camera for medium and large cities.</p>
+                        <div style="margin-top: 15px; font-weight: bold; color: var(--primary);">Recurring revenue for continuous value delivery</div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-icon">📈</div>
+                        <h3 class="model-title">Data Analytics</h3>
+                        <p>Monthly subscription for behavioral analytics dashboards, littering hotspot mapping, peak violation times, and policy effectiveness reports. USD 1,000-5,000/month per city.</p>
+                        <div style="margin-top: 15px; font-weight: bold; color: var(--primary);">Actionable insights for policy makers</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 50px; text-align: center;">
+                    <h3 style="color: var(--primary); margin-bottom: 20px;">Key Partners & Channels</h3>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 800px; margin: 0 auto;">
+                        <span class="tech-item">Municipal Partnerships</span>
+                        <span class="tech-item">Government Integration</span>
+                        <span class="tech-item">UNIDO</span>
+                        <span class="tech-item">World Bank</span>
+                        <span class="tech-item">NGO Channels</span>
+                        <span class="tech-item">Private Waste Management</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="cta">
+            <div class="container">
+                <div class="cta-container">
+                    <h2 style="font-size: 2rem; margin-bottom: 20px; color: var(--dark);">Join Us in Transforming Bangladesh's Environmental Future</h2>
+                    <p style="max-width: 700px; margin: 0 auto 30px; font-size: 1.2rem; color: var(--dark);">Nature's Vigil is participating in the Cleantech Accelerator & Commercialization Program to solve plastic waste challenges in Bangladesh.</p>
+                    <a href="https://www.plasticpath.org/page/cleantech-accelerator.html" class="btn cta-btn" target="_blank">View Competition Details</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Nature's Vigil Team. Created for the Cleantech Accelerator & Commercialization Program.</p>
+        </div>
+    </footer>
+</body>
+</html>
