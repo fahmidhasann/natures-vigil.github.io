@@ -89,11 +89,11 @@
         }
         
         .hero {
-            background: linear-gradient(165deg, rgba(248, 250, 249, 0.7) 0%, rgba(232, 245, 233, 0.75) 100%),
-                        url('assets/hero-background.jpg');
+            background-image: linear-gradient(165deg, rgba(248, 250, 249, 0.7) 0%, rgba(232, 245, 233, 0.75) 100%),
+                              url('assets/hero-background.jpg');
             background-size: cover;
             background-position: center;
-            background-blend-mode: overlay;
+            background-attachment: fixed;
             padding: 120px 0 140px;
             text-align: center;
             position: relative;
@@ -734,6 +734,7 @@
                 <div class="content-container">
                     <div class="image-content">
                         <img src="assets/solution-ai-detection.jpg" alt="AI Detection System" class="content-image">
+                        <img src="assets/solution-alert-workflow.jpg" alt="Alert Workflow and Enforcement System" class="content-image" style="margin-top: 24px;">
                     </div>
                     <div class="text-content">
                         <p>Nature's Vigil is an edge-based computer vision system that detects littering behaviors in real-time CCTV footage and triggers automated enforcement alerts (audio warnings, visual overlays, incident logging, and municipal notification).</p>
