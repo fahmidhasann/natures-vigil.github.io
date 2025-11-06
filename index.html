@@ -89,7 +89,11 @@
         }
         
         .hero {
-            background: linear-gradient(165deg, #f8faf9 0%, #e8f5e9 100%);
+            background: linear-gradient(165deg, rgba(248, 250, 249, 0.7) 0%, rgba(232, 245, 233, 0.75) 100%),
+                        url('assets/hero-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
             padding: 120px 0 140px;
             text-align: center;
             position: relative;
@@ -243,14 +247,14 @@
         .content-container {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            gap: 80px;
+            align-items: flex-start;
+            gap: 64px;
             margin: 64px 0;
         }
         
         .text-content {
             flex: 1;
-            min-width: 320px;
+            min-width: 280px;
         }
         
         .text-content h3 {
@@ -290,7 +294,21 @@
         
         .image-content {
             flex: 1;
-            min-width: 320px;
+            min-width: 280px;
+        }
+        
+        .content-image {
+            width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            object-fit: cover;
+            transition: all var(--transition);
+        }
+        
+        .content-image:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
         }
         
         .tech-stack {
@@ -690,7 +708,8 @@
                         <p>People living in cities have problems with dirty water and health risks. The waste management sector doesn't have enough resources to monitor incidents. Environmental agencies have a hard time because they don't have enough staff. Poor communities suffer the most from pollution.</p>
                     </div>
                     <div class="image-content">
-                        <div class="stats-container">
+                        <img src="assets/problem-littering.jpg" alt="Littering Problem in Bangladesh" class="content-image">
+                        <div class="stats-container" style="margin-top: 32px;">
                             <div class="stat-card">
                                 <div class="stat-value">31%</div>
                                 <div class="stat-label">Plastic Waste Recycled</div>
@@ -713,6 +732,9 @@
             <div class="container">
                 <h2 class="section-title">Our Solution</h2>
                 <div class="content-container">
+                    <div class="image-content">
+                        <img src="assets/solution-ai-detection.jpg" alt="AI Detection System" class="content-image">
+                    </div>
                     <div class="text-content">
                         <p>Nature's Vigil is an edge-based computer vision system that detects littering behaviors in real-time CCTV footage and triggers automated enforcement alerts (audio warnings, visual overlays, incident logging, and municipal notification).</p>
                         <p>Our system works through a six-step process that ensures accurate detection and immediate response:</p>
@@ -724,9 +746,7 @@
                             <li><strong>Alert Trigger:</strong> Upon detection (90% confidence), system activates audio alarm, visual overlay, SMS/app notification to enforcement officers</li>
                             <li><strong>Evidence Preservation:</strong> 24/7 encrypted logging enables accountability and supports enforcement proceedings</li>
                         </ol>
-                    </div>
-                    <div class="image-content">
-                        <div class="feature-box">
+                        <div class="feature-box" style="margin-top: 32px;">
                             <h3>Key Features</h3>
                             <ul>
                                 <li>Real-time detection</li>
@@ -764,33 +784,38 @@
                         </ul>
                     </div>
                     <div class="image-content">
-                        <div class="architecture-box">
-                            <h3>System Architecture</h3>
-                            <div>
-                                <div class="architecture-step">
-                                    <div class="step-number">1</div>
-                                    <div>[IP Camera] → Video Stream</div>
-                                </div>
-                                <div class="architecture-step">
-                                    <div class="step-number">2</div>
-                                    <div>[NVIDIA Jetson Xavier NX] → Real-time Processing</div>
-                                </div>
-                                <div class="architecture-step">
-                                    <div class="step-number">3</div>
-                                    <div>[YOLO v8] → Object Detection</div>
-                                </div>
-                                <div class="architecture-step">
-                                    <div class="step-number">4</div>
-                                    <div>[MediaPipe] → Pose Estimation</div>
-                                </div>
-                                <div class="architecture-step">
-                                    <div class="step-number">5</div>
-                                    <div>[Temporal CNN] → Action Recognition</div>
-                                </div>
-                                <div class="architecture-step">
-                                    <div class="step-number">6</div>
-                                    <div>[Alert System] → Audio/Visual Alerts</div>
-                                </div>
+                        <img src="assets/tech-architecture.png" alt="System Architecture Diagram" class="content-image" style="margin-bottom: 24px;">
+                        <img src="assets/tech-hardware.jpg" alt="Hardware Setup" class="content-image">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 48px;">
+                    <div class="architecture-box">
+                        <h3>System Architecture</h3>
+                        <div>
+                            <div class="architecture-step">
+                                <div class="step-number">1</div>
+                                <div>[IP Camera] → Video Stream</div>
+                            </div>
+                            <div class="architecture-step">
+                                <div class="step-number">2</div>
+                                <div>[NVIDIA Jetson Xavier NX] → Real-time Processing</div>
+                            </div>
+                            <div class="architecture-step">
+                                <div class="step-number">3</div>
+                                <div>[YOLO v8] → Object Detection</div>
+                            </div>
+                            <div class="architecture-step">
+                                <div class="step-number">4</div>
+                                <div>[MediaPipe] → Pose Estimation</div>
+                            </div>
+                            <div class="architecture-step">
+                                <div class="step-number">5</div>
+                                <div>[Temporal CNN] → Action Recognition</div>
+                            </div>
+                            <div class="architecture-step">
+                                <div class="step-number">6</div>
+                                <div>[Alert System] → Audio/Visual Alerts</div>
                             </div>
                         </div>
                     </div>
@@ -831,24 +856,27 @@
                         <p>Aligned with National Goals: Direct support for Bangladesh National Action Plan. Environmental Urgency: Addresses plastic crisis in high-need region. Technical Feasibility: Well-established computer vision techniques. Clear Business Model: Proven revenue streams and target customers.</p>
                     </div>
                     <div class="image-content">
-                        <div class="stats-container">
-                            <div class="stat-card">
-                                <div class="stat-value">30%</div>
-                                <div class="stat-label">Reduction Target by 2030</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">50%</div>
-                                <div class="stat-label">Plastic Waste Target</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">50</div>
-                                <div class="stat-label">Bangladesh Cities</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value">$3.7B</div>
-                                <div class="stat-label">Market Size by 2026</div>
-                            </div>
-                        </div>
+                        <img src="assets/impact-clean-city.jpg" alt="Clean City Vision" class="content-image" style="margin-bottom: 24px;">
+                        <img src="assets/impact-dashboard.jpg" alt="Analytics Dashboard" class="content-image">
+                    </div>
+                </div>
+                
+                <div class="stats-container" style="margin-top: 48px;">
+                    <div class="stat-card">
+                        <div class="stat-value">30%</div>
+                        <div class="stat-label">Reduction Target by 2030</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">50%</div>
+                        <div class="stat-label">Plastic Waste Target</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">50</div>
+                        <div class="stat-label">Bangladesh Cities</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">$3.7B</div>
+                        <div class="stat-label">Market Size by 2026</div>
                     </div>
                 </div>
             </div>
@@ -884,6 +912,10 @@
             <div class="container">
                 <h2 class="section-title">Business Model</h2>
                 <p class="section-subtitle">Multiple revenue streams to ensure sustainable growth and market penetration</p>
+                
+                <div style="text-align: center; margin-bottom: 48px;">
+                    <img src="assets/business-smart-city.jpg" alt="Smart City Implementation" class="content-image" style="max-width: 800px; margin: 0 auto; display: block;">
+                </div>
                 
                 <div class="business-models">
                     <div class="model-card">
